@@ -206,8 +206,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15487322, y: -0.000000018675673, z: 0.0000000029276859, w: 0.98793435}
-  m_LocalPosition: {x: 20.52, y: 4.31, z: -16.810001}
+  m_LocalRotation: {x: 0.25340134, y: 0.000000015853429, z: -0.0000000041528234, w: 0.9673613}
+  m_LocalPosition: {x: 20.52, y: 4.31, z: -13.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -637,7 +637,8 @@ Transform:
   m_LocalPosition: {x: 21.64, y: 2.07, z: 14.39}
   m_LocalScale: {x: 4.4737, y: 1.92812, z: 4.4737}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1060746187}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
@@ -827,8 +828,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 874166524}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1548732, y: -0.00000001867567, z: 0.0000000029276852, w: 0.9879344}
-  m_LocalPosition: {x: 20.52, y: 4.31, z: -16.810001}
+  m_LocalRotation: {x: 0.25340134, y: 0.000000015853429, z: -0.0000000041528225, w: 0.9673613}
+  m_LocalPosition: {x: 20.52, y: 4.31, z: -13.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -875,7 +876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetOffset: {x: 0, y: 0, z: -3}
+  TargetOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 4
     PositionDamping: {x: 1, y: 1, z: 1}
@@ -899,7 +900,7 @@ MonoBehaviour:
   HorizontalAxis:
     Value: 0
     Center: 0
-    Range: {x: -180, y: 180}
+    Range: {x: -360, y: 360}
     Wrap: 1
     Recentering:
       Enabled: 0
@@ -974,9 +975,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 459012151}
-  speed: 30
-  force: 40
   cam: {fileID: 874166530}
+  speed: 15
+  force: 30
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!54 &1060182320
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1002,7 +1006,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &1060182321
 CapsuleCollider:
@@ -1027,6 +1031,59 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1060746186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1060746187}
+  - component: {fileID: 1060746188}
+  m_Layer: 3
+  m_Name: TopCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1060746187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060746186}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 0.11382, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811543529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1060746188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060746186}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1254112112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,7 +1096,7 @@ GameObject:
   - component: {fileID: 1254112115}
   - component: {fileID: 1254112114}
   - component: {fileID: 1254112113}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
         moveDirection.y = 0; // Prevent vertical movement from camera tilt
         moveDirection.Normalize(); // Prevent diagonal speed boost
 
-        Debug.Log(moveDirection);
         rb.AddForce(speed * moveDirection, ForceMode.Acceleration); // Use Acceleration for smoother movement
     }
 
