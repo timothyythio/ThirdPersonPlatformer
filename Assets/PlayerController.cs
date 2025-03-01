@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,10 +7,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cam; 
     [SerializeField] private float speed;
     [SerializeField] private float force;
+    [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float dashCoolDownTime;
     private int jumpCount;
-    private bool onObstacle;
     private bool onGround;
+    private bool dashReady = true;
 
     private Rigidbody rb;
 
@@ -18,11 +21,12 @@ public class PlayerController : MonoBehaviour
         inputManager.OnMove.AddListener(MovePlayer);
         rb = GetComponent<Rigidbody>();
         inputManager.OnSpacePressed.AddListener(JumpPlayer);
+        inputManager.OnShiftPressed.AddListener(Dash);
     }
 
     private void MovePlayer(Vector2 direction)
     {
-        if (direction.magnitude < 0.1f || (onObstacle && !onGround)) return;
+        if (direction.magnitude < 0.1f) return;
 
         Vector3 moveDirection = cam.TransformDirection(new Vector3(direction.x, 0f, direction.y));
         moveDirection.y = 0; 
@@ -35,15 +39,25 @@ public class PlayerController : MonoBehaviour
     {
         if (onGround)
         {
-            rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             onGround = false;
             jumpCount++;
         }
         else if (jumpCount < 1)
         {
-            rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpCount++;
         }
+    }
+
+    private void Dash()
+    {   
+        if (dashReady) {
+            rb.AddForce(cam.forward * force, ForceMode.Impulse);
+            dashReady = false;
+            StartCoroutine(DashCooldown()); 
+        }
+
     }
 
     private void FixedUpdate()
@@ -53,22 +67,18 @@ public class PlayerController : MonoBehaviour
         if (onGround) {
             jumpCount = 0;
         }
+
+        Vector3 forwardDirection = cam.forward;
+        forwardDirection.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(forwardDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    IEnumerator DashCooldown()
     {
-       if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            onObstacle = true; 
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            onObstacle = false;
-        }
+        yield return new WaitForSeconds(dashCoolDownTime);
+        dashReady = true;
+        Debug.Log("Ready to dash!");
     }
 
 

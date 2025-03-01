@@ -5,7 +5,7 @@ public class InputManager : MonoBehaviour
 {
     public UnityEvent<Vector2> OnMove = new UnityEvent<Vector2>();
     public UnityEvent OnSpacePressed = new UnityEvent();
-    public UnityEvent onShiftPressed = new UnityEvent();
+    public UnityEvent OnShiftPressed = new UnityEvent();
     void Start()
     {
         
@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            onShiftPressed?.Invoke();
+            OnShiftPressed?.Invoke();
 
         }
         OnMove?.Invoke(input);
