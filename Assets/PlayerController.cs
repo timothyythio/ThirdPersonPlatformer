@@ -3,11 +3,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private InputManager inputManager;
-    [SerializeField] private Transform cam; // Assign the Cinemachine Camera in the Inspector
+    [SerializeField] private Transform cam; 
     [SerializeField] private float speed;
     [SerializeField] private float force;
-    [SerializeField] private LayerMask groundLayer; // Assign this to "Ground" layer in Inspector
-
+    [SerializeField] private LayerMask groundLayer;
+    private int jumpCount;
+    private bool onObstacle;
     private bool onGround;
 
     private Rigidbody rb;
@@ -21,14 +22,13 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer(Vector2 direction)
     {
-        if (direction.magnitude < 0.1f) return; // Prevents small unwanted movement
+        if (direction.magnitude < 0.1f || (onObstacle && !onGround)) return;
 
-        // Convert input into world space movement relative to the camera
         Vector3 moveDirection = cam.TransformDirection(new Vector3(direction.x, 0f, direction.y));
-        moveDirection.y = 0; // Prevent vertical movement from camera tilt
-        moveDirection.Normalize(); // Prevent diagonal speed boost
+        moveDirection.y = 0; 
+        moveDirection.Normalize(); 
 
-        rb.AddForce(speed * moveDirection, ForceMode.Acceleration); // Use Acceleration for smoother movement
+        rb.AddForce(speed * moveDirection, ForceMode.Acceleration); 
     }
 
     private void JumpPlayer()
@@ -37,15 +37,39 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
             onGround = false;
+            jumpCount++;
+        }
+        else if (jumpCount < 1)
+        {
+            rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+            jumpCount++;
         }
     }
 
-    // Adds gravity to make the jump and fall more realistic
     private void FixedUpdate()
     {
         rb.AddForce(Physics.gravity * 5 * rb.mass);
         onGround = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
+        if (onGround) {
+            jumpCount = 0;
+        }
     }
 
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+       if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            onObstacle = true; 
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            onObstacle = false;
+        }
+    }
+
+
 }

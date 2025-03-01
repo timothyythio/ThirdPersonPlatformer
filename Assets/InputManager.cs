@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            OnSpacePressed?.Invoke();
+            onShiftPressed?.Invoke();
 
         }
         OnMove?.Invoke(input);
